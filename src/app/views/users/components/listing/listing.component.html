@@ -1,0 +1,196 @@
+<div class="title-bar">
+  <h1 class="title-bar-title">
+    <span class="d-ib">Users List</span>
+  </h1>
+</div>
+
+<div class="dataTable-container mat-elevation-z8">
+
+<mat-form-field class="bg-wyt-manage" >
+  <div class="padding-left-5 padding-right-5 ">
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+  </div>
+</mat-form-field>  
+
+<table mat-table #table [dataSource]="dataSource" matSort>
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Full Name </th>
+    <td mat-cell *matCellDef="let element"> {{(element.name) ? element.name : '--'}}</td>
+  </ng-container>
+
+  <!-- Weight Column -->
+  <ng-container matColumnDef="email">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
+    <td mat-cell *matCellDef="let element"> {{(element.email)? element.email : '--'}} </td>
+  </ng-container>
+
+  <!-- Symbol Column -->
+  <ng-container matColumnDef="mobile">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Mobile </th>
+    <td mat-cell *matCellDef="let element"> {{(element.mobile_number)? element.mobile_number : ''}} </td>
+  </ng-container>
+
+  <!-- Action Column -->
+  <ng-container matColumnDef="action">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Action </th>
+    <td mat-cell *matCellDef="let element"> 
+      <button matTooltip=" {{(element.is_blocked)? 'Blocked' : 'Unblocked'}}" (click)="toggleBlocking( { isBlocked: element.is_blocked, user_id: element.user_id } )" [ngClass] = "{ 'btn-warning': element.is_blocked == 1, 'btn-info': element.is_blocked == 0  }" class="btn btn-small">
+        <i *ngIf="element.is_blocked == 1" class="fa fa-ban"></i>
+        <i *ngIf="element.is_blocked == 0" class="fa fa-unlock-alt"></i>
+      </button> 
+      <button data-toggle="modal" style="margin-left: 5px;" (click)="getSingleUserData(element.user_id)" data-target="#viewDetail" class="btn btn-primary"><i class="fa fa-eye"></i></button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+
+<mat-paginator  #paginator [pageSize]="10" [pageSizeOptions]="[10, 25, 50, 100]">
+</mat-paginator>
+
+</div>
+
+<!-- -------------- MODAL -->
+
+<div id="viewDetail" tabindex="-1" role="dialog" class="modal fade viewDetailModal">
+<div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-primary">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">×</span>
+          <span class="sr-only">Close</span>
+        </button>
+        <h4 class="modal-title">User's Detail</h4>
+      </div>
+      <div class="modal-body provider-detail">
+        <div class="text-center padding-bottom-10">
+            <img *ngIf="singleData?.thumbnail" src="{{ envtmnt.baseUrl }}user/{{singleData?.thumbnail}}"  width="50" height="50"  alt="No Image">
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-body">
+                <div class="timeline">
+                  <div class="timeline-item">
+                    <div class="timeline-segment">
+                      <img class="timeline-media img-circle" width="40" height="40" src="./assets/img/8244439665.jpg" alt="img">
+                    </div>
+                    <div class="timeline-content">
+                      <div class="timeline-row"><a href="javascript:void(0)">Name</a></div>
+                      <div matTooltip="{{(singleData.isVerified)? 'Verified' : 'Unverified'}}" class="timeline-row">{{ (singleData?.name)? singleData?.name : '--' }}
+                        <small class="badge badge-success" [ngClass]="{ 'badge-warning': singleData?.is_verified == 0 }"  >{{ (singleData?.is_verified == 0)? 'Not verified': 'Verfied' }}</small>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="timeline-item">
+                    <div class="timeline-segment">
+                      <img class="timeline-media img-circle" width="40" height="40" src="./assets/img/8244439665.jpg" alt="img">
+                    </div>
+                    <div class="timeline-content">
+                      <div class="timeline-row"><a href="javascript:void(0)">Mobile</a></div>
+                      <div class="timeline-row">{{ (singleData?.mobile_number)? singleData?.mobile_number : '--' }}</div>
+                    </div>
+                  </div> 
+                  <div class="timeline-item">
+                    <div class="timeline-segment">
+                      <img class="timeline-media img-circle" width="40" height="40" src="./assets/img/8244439665.jpg" alt="img">
+                    </div>
+                    <div class="timeline-content">
+                        <!-- Total Jobs Posted -->
+                      <div class="timeline-row"><a href="javascript:void(0)">Email</a></div>
+                      <div class="timeline-row">{{ (singleData?.email )? singleData?.email : '--' }}</div>
+                    </div>
+                  </div>                         
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-body">
+                <div class="timeline">
+                  <!-- <div class="timeline-item">
+                    <div class="timeline-segment">
+                      <span class="timeline-divider"></span>
+                    </div>
+                    <div class="timeline-content"></div>
+                  </div> -->
+                  <div class="timeline-item">
+                    <div class="timeline-segment">
+                      <img class="timeline-media img-circle" width="40" height="40" src="./assets/img/8244439665.jpg" alt="img">
+                    </div>
+                    <div class="timeline-content">
+                      <div class="timeline-row"><a href="javascript:void(0)">Joined on</a></div>
+                      <div class="timeline-row">{{ singleData?.created_on | date }}</div>
+                    </div>
+                  </div>    
+                  <div class="timeline-item">
+                    <div class="timeline-segment">
+                      <img class="timeline-media img-circle" width="40" height="40" src="./assets/img/8244439665.jpg" alt="img">
+                    </div>
+                    <div class="timeline-content">
+                      <div class="timeline-row"><a href="javascript:void(0)">Social Profile</a></div>
+                      <div class="timeline-row">{{ (singleData?.social_type == 0 )? 'NO' : (singleData?.social_type == 'facebook')? 'Facebook':'Google' }}</div>
+                    </div>
+                  </div>     
+                  <div class="timeline-item">
+                    <div class="timeline-segment">
+                      <img class="timeline-media img-circle" width="40" height="40" src="./assets/img/8244439665.jpg" alt="img">
+                    </div>
+                    <div class="timeline-content">
+                      <div class="timeline-row"><a href="javascript:void(0)">Blocked</a></div>
+                      <div class="timeline-row">{{ (singleData?.is_blocked == 0)? 'Unblocked' : 'Blocked' }}</div>
+                    </div>
+                  </div>                                  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <h5>Additional Data -</h5>
+        <hr class="hr">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-body">
+                <div class="timeline">
+                  <div class="timeline-item">
+                    <div class="timeline-segment">
+                      <img class="timeline-media img-circle" width="40" height="40" src="./assets/img/8244439665.jpg" alt="img">
+                    </div>
+                    <div class="timeline-content">
+                      <div class="timeline-row"><a href="javascript:void(0)">Allergy Note</a></div>
+                      <div class="timeline-row">{{ (singleData?.allergy_note)? singleData?.allergy_note : '--' }}</div>
+                    </div>
+                  </div> 
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-body">
+                <div class="timeline">
+                  <div class="timeline-item">
+                    <div class="timeline-segment">
+                      <img class="timeline-media img-circle" width="40" height="40" src="./assets/img/8244439665.jpg" alt="img">
+                    </div>
+                    <div class="timeline-content">
+                      <div class="timeline-row"><a href="javascript:void(0)">Spice tollerance level</a></div>
+                      <div class="timeline-row">{{ (singleData?.spice_tolerance == 0)? '--' : 'Level ' + singleData?.spice_tolerance }}</div>
+                    </div>
+                  </div> 
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+<div class="modal-footer"></div>
+</div>

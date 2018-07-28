@@ -1,0 +1,169 @@
+<div class="col-sm-12 col-md-12">
+  <div class="form-group">
+    <button class="btn btn-default btn-sm btn-labeled" type="button" data-toggle="modal" data-target="#newMainCategory">
+      <span class="btn-label">
+        <span class="icon icon-plus icon-lg icon-fw"></span>
+      </span>
+        Add new main category
+    </button>
+  </div>
+</div>
+
+
+
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+  <!-- Position Column -->
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef> Name </th>
+    <td mat-cell *matCellDef="let element"> {{element.main_category_name}} </td>
+  </ng-container>
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="image">
+    <th mat-header-cell *matHeaderCellDef> Image </th>
+    <td mat-cell *matCellDef="let element"> 
+      <img height="50em" width="50em" class="main-category-image" [src]="element.main_category_image" alt="">
+      <!-- {{element.main_category_image}}  -->
+    </td>
+  </ng-container>
+
+  <!-- Weight Column -->
+  <ng-container matColumnDef="action-view-cat">
+    <th mat-header-cell *matHeaderCellDef> View Category </th>
+    <td mat-cell *matCellDef="let element"> 
+      <button 
+        class="btn btn-default btn-sm btn-labeled" 
+        type="button" 
+        (click)="viewCategory(element.main_category_id)"
+        >
+        <span class="btn-label">
+          <span class="icon icon-eye icon-lg icon-fw"></span>
+        </span>
+        View Category
+      </button> 
+    </td>
+  </ng-container>
+
+  <!-- Symbol Column -->
+  <ng-container matColumnDef="action-delete">
+    <th mat-header-cell *matHeaderCellDef> Delete </th>
+    <td mat-cell *matCellDef="let element">
+      <button class="btn btn-danger btn-sm btn-labeled" type="button"
+        (click)="deleteMainCategory(element.main_category_id)" [attr._id]="element._id">
+        <span class="btn-label">
+          <span class="icon icon-bank icon-lg icon-fw"></span>
+        </span>
+        Delete
+      </button>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="action-edit">
+    <th mat-header-cell *matHeaderCellDef> Edit </th>
+    <td mat-cell *matCellDef="let element">
+      <button class="btn btn-success btn-sm btn-labeled" type="button" data-toggle="modal" data-target="#editMainCategory"
+        (click)="editMainCategory(element.main_category_id)" [attr._id]="element._id">
+        <span class="btn-label">
+          <span class="icon icon-bank icon-lg icon-fw"></span>
+        </span>
+        Edit
+      </button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+</table>
+<mat-paginator [length]="length" [pageSize]="pageSize" (page)="onPaginatorChange($event)" [pageSizeOptions]="pageSizeOptions"
+  (page)="pageEvent = $event">
+</mat-paginator>
+
+
+<!-- Add new main category MODAL -->
+<div id="newMainCategory" tabindex="-1" role="dialog" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-primary">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">×</span>
+          <span class="sr-only">Close</span>
+        </button>
+        <h4 class="modal-title">Add Main Category</h4>
+      </div>
+      <div class="modal-body provider-detail">
+        <p class="text-danger">{{ errMessage }}</p>
+        <form #changePass="ngForm" (ngSubmit)="createMainCategory(changePass.value)">
+          <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+              <div class="form-group">
+                <input 
+                  type="text" 
+                  placeholder="Main Category name" 
+                  name="main_category_name" 
+                  required
+                  [(ngModel)]="mainCategoryName"
+                  class="form-control">
+                
+                  <input 
+                  type="file" 
+                  placeholder="Main Category Image"  
+                  (change)="fileMainCatIm($event)"
+                  class="form-control">
+              </div>
+              <div class="form-group">
+                <button class="btn btn-primary" [disabled]="!changePass.form.valid">Submit</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Add new main category MODAL -->
+<div id="editMainCategory" tabindex="-1" role="dialog" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-primary">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">×</span>
+          <span class="sr-only">Close</span>
+        </button>
+        <h4 class="modal-title">Update Main category</h4>
+      </div>
+      <div class="modal-body provider-detail">
+        <p class="text-danger">{{ errMessage }}</p>
+        <form #changePass="ngForm" (ngSubmit)="updateMainCategory(changePass.value)">
+          <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+              <div class="form-group">
+                
+                <input 
+                  type="text" 
+                  placeholder="Main Category name" 
+                  name="main_category_name" 
+                  required
+                  [(ngModel)]="mainCategoryName"
+                  class="form-control">
+                
+                  <input 
+                  type="file" 
+                  placeholder="Main Category Image"  
+                  (change)="fileMainCatIm($event)"
+                  class="form-control">
+              </div>
+              <div class="form-group">
+                <button class="btn btn-primary" [disabled]="!changePass.form.valid">Submit</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer"></div>
+    </div>
+  </div>
+</div>
