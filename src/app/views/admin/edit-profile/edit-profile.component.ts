@@ -33,14 +33,15 @@ export class EditProfileComponent implements OnInit {
 
   updateAdminProfile(){
     var fd = new FormData();
-    fd.append('name', this.adminData.name);
+    fd.append('firstName', this.adminData.firstName);
     fd.append('email', this.adminData.email);
-    fd.append('mobile_number', this.adminData.mobile_number);
-    fd.append('address', this.adminData.address);
+    fd.append('phoneNumber', this.adminData.phoneNumber);
+    fd.append('lastName', this.adminData.lastName);
+    fd.append('about', this.adminData.about);
     // fd.append('location', this.adminData.location);
     fd.append('thumbnail', this.adminData.thumbnail );
 
-    this.http.put(`/admin/updateAdminDetail/${this.adminData.row_id}`, fd)
+    this.http.post(`admin/updateProfile`, fd)
       .subscribe(response => {
         console.log(response);
         if(response && response['response']){
@@ -95,7 +96,7 @@ export class EditProfileComponent implements OnInit {
     console.log(' this.profileForm => ', this.profileForm.value);
 
     this.http
-      .put(`/admin/${this.adminData._id}/edit`, this.profileForm.value)
+      .post(`admin/updateProfile`, this.profileForm.value)
       .subscribe((adminData) => {
         this.adminData = adminData['data'];
         localStorage.setItem('adminData', JSON.stringify(this.adminData));

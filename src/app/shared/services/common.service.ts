@@ -26,10 +26,10 @@ export class CommonService {
     var token;
     if(localStorage.getItem('adminData')){
       var admindata = JSON.parse(localStorage.getItem('adminData'));
-      token = admindata.access_token;
+      token = admindata.token;
     }
     return this.http.post(environment.baseUrl + url, params, {
-      headers: new HttpHeaders({ 'access_token': token })
+      headers: new HttpHeaders({ 'token': token })
     });
   }
 
@@ -37,11 +37,11 @@ export class CommonService {
     var token;
     if(localStorage.getItem('adminData')){
       var admindata = JSON.parse(localStorage.getItem('adminData'));
-      token = admindata.access_token;
+      token = admindata.token;
     }
 
     return this.http.get(environment.baseUrl + url, {
-      headers: new HttpHeaders({ 'access_token': token })
+      headers: new HttpHeaders({ 'token': token })
     });
   }
 
@@ -49,10 +49,10 @@ export class CommonService {
     var token;
     if(localStorage.getItem('adminData')){
       var admindata = JSON.parse(localStorage.getItem('adminData'));
-      token = admindata.access_token;
+      token = admindata.token;
     }
     return this.http.put(environment.baseUrl + url, params, {
-      headers: new HttpHeaders({ 'access_token': token })
+      headers: new HttpHeaders({ 'token': token })
     });
   }
 

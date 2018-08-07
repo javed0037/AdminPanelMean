@@ -24,4 +24,9 @@ export class AuthService {
     this.router.navigate(['/']);
     return true;
   }
+
+  getLoginUser() {
+    const adminData = localStorage.getItem('adminData');
+    return JSON.parse(adminData);
+  }
 }

@@ -43,7 +43,7 @@
           
           <li class="dropdown hidden-xs">
             <button class="navbar-account-btn" data-toggle="dropdown" aria-haspopup="true">
-              <img class="rounded" width="36" height="36" [src]=" (adminData?.profile_image)? (environment.baseUrl + adminData.profile_image) : './assets/img/3002121059.jpg' " alt="Profile pic"> {{ (adminData.name)? adminData.name : 'User' }}
+              <img class="rounded" width="36" height="36" [src]=" (adminData?.profileImage)? (environment.baseUrl + adminData.profileImage) : './assets/img/3002121059.jpg' " alt="Profile pic"> {{ (adminData.firstName)? adminData.firstName : 'User' }}
               <span class="caret"></span>
             </button>
             <ul class="dropdown-menu dropdown-menu-right">

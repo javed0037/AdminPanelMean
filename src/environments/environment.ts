@@ -9,7 +9,9 @@ export const environment = {
   // footer:'TAWLTK',
   appName: 'LikeMinded- Admin',
   footer:'LikeMinded',
-  baseUrl: 'http://localhost:5000/'
+ baseUrl: 'http://localhost:5000/'
+   // baseUrl:'http://18.219.244.162:5000/'
+
 };
 
 /*

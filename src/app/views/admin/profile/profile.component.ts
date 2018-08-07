@@ -32,11 +32,17 @@ export class ProfileComponent implements OnInit {
   }
 
   changePassword(data){
+    const adminData = localStorage.getItem('adminData');
+    const adminData2 = JSON.parse(adminData);
+    console.log('****there are data****',data);
+
     var putData = {
-      new_password: data.newPass,
-      old_password: data.oldPass
+      adminId: adminData2._id,
+      newPassword: data.newPass,
+      oldPassword: data.oldPass,
+      confirmNewPassword: data.rePass
     }
-    this.http.put('/admin/change_password', putData)
+    this.http.post('likeMinded/changePassword', putData)
       .subscribe(response => {
         if(response) {
           // this.commonService.toggleSnackBar(this.errMessage = response['response']);

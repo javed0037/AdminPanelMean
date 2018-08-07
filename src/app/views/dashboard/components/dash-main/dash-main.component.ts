@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { Chart } from 'chart.js';
 import { environment } from '../../../../../environments/environment';
+import { AuthService } from '../../../../shared/services/auth.service';
 
 @Component({
   selector: 'app-dash-main',
@@ -16,14 +17,17 @@ export class DashMainComponent implements OnInit, AfterViewInit {
   environment = environment;
   constructor(
     private commonService: CommonService,
-    private http: HttpClient
+    private http: HttpClient,
+    private _auth: AuthService
   ) { }
 
   dataCount;
 
   ngOnInit() {
     
-    this.http.get('/admin/get_dashboard_data')
+    let user = this._auth.getLoginUser();
+
+    this.http.post('likeMinded/getAdminProfile', {adminId: user._id})
     .subscribe(response => {
       console.log(response);
       if(response) {
