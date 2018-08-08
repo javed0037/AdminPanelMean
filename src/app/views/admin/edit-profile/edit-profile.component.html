@@ -14,33 +14,43 @@
         <div class="col-md-12 card panel-body">
             <div class="col-sm-12 col-md-12">
               <div class="demo-form-wrapper">
-                <form [formGroup]="profileForm" class="form form-horizontal" enctype="multipart/form-data" >
+
+                <form #profileForm ="ngForm" class="form form-horizontal" enctype="multipart/form-data" >
+
+                    <button (click)="showForm(profileForm)"> Print form</button>
                     <div class="form-group">
                         <div class="col-md-8">
                             <label for="name" class=" control-label">Name</label>
-                            <input name="name" class="form-control" formControlName="name" type="text">
-                            <!-- <small *ngIf="name.invalid && name.touched" class="text-danger">This field is required</small> -->
+                            <input 
+                                name="name" 
+                                class="form-control" 
+                                ngModel
+                                #name="ngModel"
+                                type="text"
+                                required
+                            >
+                            <small *ngIf="name.invalid && name.touched" class="text-danger">This field is required</small>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-md-8">
-                            <label for="email" class=" control-label">Email</label>
-                            <input formControlName="email" name="email" class="form-control" type="text">
-                            <!-- <small *ngIf="email.invalid && email.touched" class="text-danger">This field is required</small> -->
+                            <label for="email" class="control-label">Email</label>
+                            <input name="email" ngModel class="form-control" #email = "ngModel" type="text">
+                            <small *ngIf="email.invalid && email.touched" class="text-danger">This field is required</small>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-md-8">
-                            <label for="mobile_number" class=" control-label">Phone</label>
+                            <label for="phoneNumber" class=" control-label">Phone</label>
 
-                            <input formControlName="mobile_number" name="mobile_number" class="form-control" type="text">
-                            <!-- <small *ngIf="mobile_number.invalid && mobile_number.touched" class="text-danger">This field is required</small> -->
+                            <input name="phoneNumber" ngModel class="form-control" #phoneNumber = "ngModel" type="text">
+                             <small *ngIf="phoneNumber.invalid && phoneNumber.touched" class="text-danger">This field is required</small>
                         </div>
 
                     </div>
                     <div class="form-group">
                         <div class="col-md-4">
-                            <img  style="width: 150px; height: 150px;" [src]=" (adminData.profile_image)? (environment.baseUrl + '/' + adminData.profile_image) : './assets/img/3002121059.jpg' " alt="Profile pic">
+                            <img  style="width: 150px; height: 150px;" [src]=" (adminData.profile_image)? (environment.baseUrl + '/' + adminData.profile_image) : './assets/img/3002121059.jpg' " alt="Profile pic" >
                         </div>
                         <div class="col-md-4">
                             <label for="thumbnail" class=" control-label">Add profile pic</label>
@@ -51,16 +61,18 @@
                     <div class="form-group">
                         <div class="col-md-8">
                             <label for="location" class=" control-label">Location</label>
-
-                            <input formControlName="mobile_number" name="mobile_number" class="form-control" type="text">
-                            <!-- <small *ngIf="mobile_number.invalid && mobile_number.touched" class="text-danger">This field is required</small> -->
+                            
+                            <input name="location" ngModel 
+                             class="form-control" #location="ngModel" type="text">
+                        <small *ngIf="location.invalid && location.touched" class="text-danger">This field is required</small>
+                        </div>
                         </div>
 
-                    </div>
                     <div class="form-group">
                         <div class="col-md-8">
-                            <label for="address" class="control-label">AboutMe</label>
-                            <textarea  formControlName="about" name="about" class="form-control" rows="5"></textarea>
+                            <label for="about" class="control-label">AboutMe</label>
+                            <textarea   name="about" ngModel
+                             class="form-control" rows="5"></textarea>
                             <!-- <small *ngIf="address.invalid && address.touched" class="text-danger">This field is required</small> -->
                         </div>
                     </div>
@@ -68,7 +80,7 @@
                       <div class="form-group">
                         <div class="col-md-8">
                             <label for="address" class="control-label">Address</label>
-                            <textarea  formControlName="address" name="address" class="form-control" rows="5"></textarea>
+                            <textarea  name="address" ngModel class="form-control" rows="5"></textarea>
                             <!-- <small *ngIf="address.invalid && address.touched" class="text-danger">This field is required</small> -->
                         </div>
                     </div>
@@ -77,7 +89,7 @@
                             <button class="btn btn-primary"
                             [disabled]="profileForm.touched && !profileForm.valid "
                             type="submit"
-                            (click)="onEditProfile()">Submit</button>
+                            (click)="onEditProfile(profileForm)">Submit</button>
                         </div>
                     </div>
                 </form>

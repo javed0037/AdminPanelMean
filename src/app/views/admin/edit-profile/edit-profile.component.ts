@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonService } from '../../../shared/services/common.service';
 import { environment } from '../../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
@@ -10,6 +10,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
   styleUrls: ['./edit-profile.component.scss']
 })
 export class EditProfileComponent implements OnInit {
+  
+  // @ViewChild('profileForm') prf: FormGroup;
 
   constructor(
     private commonService: CommonService,
@@ -21,15 +23,7 @@ export class EditProfileComponent implements OnInit {
 
   environment = environment;
   adminData: any;
-  // adminData = {
-  //   row_id: '',
-  //   name: '',
-  //   email: '',
-  //   thumbnail: '',
-  //   mobile_number: '',
-  //   address: '',
-  //   location: ''
-  // };
+
 
   updateAdminProfile(){
     var fd = new FormData();
@@ -71,20 +65,27 @@ export class EditProfileComponent implements OnInit {
     }
   }
 
+  showForm(form) {
+    console.log(form);
+  }
+
   initProfileform() {
     this.profileForm = this.fb.group({
       'name': [this.adminData.name, Validators.required],
-      'access_token': [this.adminData.access_token, Validators.required],
-      'created_on': [this.adminData.created_on, Validators.required],
+      //'access_token': [this.adminData.access_token, Validators.required],
+      //'created_on': [this.adminData.created_on, Validators.required],
       'address': [this.adminData.address, Validators.required],
       'email': [this.adminData.email, Validators.required],
-      'mobile_number': [this.adminData.mobile_number, Validators.required],
+      'phoneNumber': [this.adminData.phoneNumber, Validators.required],
       'timeStamp': [this.adminData.timeStamp, Validators.required],
       '_id': [this.adminData._id, Validators.required],
     });
   }
 
-  onEditProfile() {
+  onEditProfile(profileForm) {
+
+    console.log(profileForm.value);
+return;    
     
     if (this.adminData.thumbnail) {
       
@@ -95,17 +96,17 @@ export class EditProfileComponent implements OnInit {
     }
     console.log(' this.profileForm => ', this.profileForm.value);
 
-    this.http
-      .post(`admin/updateProfile`, this.profileForm.value)
-      .subscribe((adminData) => {
-        this.adminData = adminData['data'];
-        localStorage.setItem('adminData', JSON.stringify(this.adminData));
-        window.location.reload();
-        this.commonService.toggleSnackBar('Profile updated successfully');
-      }, err => {
-        console.log(' Error => ', err);
-        this.commonService.toggleSnackBar('Error in updating profile.');
-      })
+    // this.http
+    //   .post(`admin/updateProfile`, this.profileForm.value)
+    //   .subscribe((adminData) => {
+    //     this.adminData = adminData['data'];
+    //     localStorage.setItem('adminData', JSON.stringify(this.adminData));
+    //     window.location.reload();
+    //     this.commonService.toggleSnackBar('Profile updated successfully');
+    //   }, err => {
+    //     console.log(' Error => ', err);
+    //     this.commonService.toggleSnackBar('Error in updating profile.');
+    //   })
   }
 
   onFileChanged(event) {
@@ -119,7 +120,7 @@ export class EditProfileComponent implements OnInit {
     uploadData.append('profile_image', file, file.name);
     uploadData.append('admin_id', this.adminData._id);
 
-    this.http.post('/admin/upload_profile_image', uploadData)
+    this.http.post('admin/upload_profile_image', uploadData)
       .subscribe(event => {
         if(event['error']) {
           this.commonService.toggleSnackBar('Error in uploading profile.');
@@ -134,5 +135,7 @@ export class EditProfileComponent implements OnInit {
         this.commonService.toggleSnackBar('Error in uploading profile.');
       });
   }
+
+  
 
 }
