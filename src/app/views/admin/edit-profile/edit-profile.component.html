@@ -1,102 +1,139 @@
+<form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+<div class="row gutter-xs">
 
-<div class="layout-content-body">
-    <div class="title-bar">
-        <h1 class="title-bar-title">
-          <span class="d-ib">Edit Profile</span>
-          <!-- <a href="profile.php">Back</a> -->
-        </h1>
-        <!-- <p class="title-bar-description">
-            <small>Welcome to 365 Fuel</small>
-        </p> -->
-    </div>
 
-    <div class="row gutter-xs">
-        <div class="col-md-12 card panel-body">
+        <div class="col-md-8 card panel-body  " id="">
             <div class="col-sm-12 col-md-12">
-              <div class="demo-form-wrapper">
 
-                <form #profileForm ="ngForm" class="form form-horizontal" enctype="multipart/form-data" >
-
-                    <button (click)="showForm(profileForm)"> Print form</button>
+                <div class="demo-form-wrapper">
+                        <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+                    
                     <div class="form-group">
                         <div class="col-md-8">
-                            <label for="name" class=" control-label">Name</label>
-                            <input 
-                                name="name" 
-                                class="form-control" 
-                                ngModel
-                                #name="ngModel"
-                                type="text"
-                                required
-                            >
-                            <small *ngIf="name.invalid && name.touched" class="text-danger">This field is required</small>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-8">
-                            <label for="email" class="control-label">Email</label>
-                            <input name="email" ngModel class="form-control" #email = "ngModel" type="text">
-                            <small *ngIf="email.invalid && email.touched" class="text-danger">This field is required</small>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-8">
-                            <label for="phoneNumber" class=" control-label">Phone</label>
+                            <label for="email-2" class=" control-label">First Name</label>
 
-                            <input name="phoneNumber" ngModel class="form-control" #phoneNumber = "ngModel" type="text">
-                             <small *ngIf="phoneNumber.invalid && phoneNumber.touched" class="text-danger">This field is required</small>
+                            <input type="text" formControlName="firstName" class="form-control">
                         </div>
-
                     </div>
-                    <div class="form-group">
-                        <div class="col-md-4">
-                            <img  style="width: 150px; height: 150px;" [src]=" (adminData.profile_image)? (environment.baseUrl + '/' + adminData.profile_image) : './assets/img/3002121059.jpg' " alt="Profile pic" >
-                        </div>
-                        <div class="col-md-4">
-                            <label for="thumbnail" class=" control-label">Add profile pic</label>
-                            <input (change)="onFileChanged($event)" type="file">
-                        </div>
-
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-8">
-                            <label for="location" class=" control-label">Location</label>
-                            
-                            <input name="location" ngModel 
-                             class="form-control" #location="ngModel" type="text">
-                        <small *ngIf="location.invalid && location.touched" class="text-danger">This field is required</small>
-                        </div>
-                        </div>
 
                     <div class="form-group">
-                        <div class="col-md-8">
-                            <label for="about" class="control-label">AboutMe</label>
-                            <textarea   name="about" ngModel
-                             class="form-control" rows="5"></textarea>
-                            <!-- <small *ngIf="address.invalid && address.touched" class="text-danger">This field is required</small> -->
+                            <div class="col-md-8">
+                                <label for="email-2" class=" control-label">Last Name</label>
+
+                                <input type="text" formControlName="lastName" class="form-control">
+                            </div>
                         </div>
-                    </div>
-            
-                      <div class="form-group">
-                        <div class="col-md-8">
-                            <label for="address" class="control-label">Address</label>
-                            <textarea  name="address" ngModel class="form-control" rows="5"></textarea>
-                            <!-- <small *ngIf="address.invalid && address.touched" class="text-danger">This field is required</small> -->
+
+                        <div class="form-group">
+                            <div class="col-md-8">
+                                <label for="email-2" class=" control-label">Email</label>
+
+                                <input type="text" formControlName="email" class="form-control">
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <div class=" col-sm-8  col-md-8 ">
-                            <button class="btn btn-primary"
-                            [disabled]="profileForm.touched && !profileForm.valid "
-                            type="submit"
-                            (click)="onEditProfile(profileForm)">Submit</button>
+
+                        <div class="form-group">
+                            <div class="col-md-8">
+                                <label for="email-2" class=" control-label">Phone</label>
+
+                                <input type="text" formControlName="phoneNumber" class="form-control">
+                            </div>
+
                         </div>
-                    </div>
-                </form>
-              </div>
+                        <div class="form-group">
+                            <div class="col-md-8">
+                                <label for="email-2" class=" control-label">Add profile pic</label>
+
+                                <input  type="file" class="form-control" (change)="filee($event)">
+                            </div>
+
+                        </div>
+               
+                        <div class="form-group">
+                            <div class="col-md-8">
+                                <label for="email-2" class=" control-label">Location</label>
+
+                                <input id="" class="form-control" type="text" >
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-8">
+                                <label for="about" class=" control-label">About me</label>
+
+                                <input type="text" formControlName="aboutMe" class="form-control">
+     </div>
+ </div>
+  <div class="form-group">
+     <div class="col-md-8">
+         <label for="address" class=" control-label">Address</label>
+
+                                <textarea id="" class="form-control" rows="5"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class=" col-sm-8  col-md-8 ">
+                                <button class="btn btn-primary " type="submit">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
 
         </div>
     </div>
+</form>
 
-</div>
+<!-- <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+  
+    <label>
+      First Name:
+      <input type="text" formControlName="firstName">
+    </label>
+  
+    <label>
+      Last Name:
+      <input type="text" formControlName="lastName">
+    </label>
+
+    <label>
+       email:
+        <input type="text" formControlName="email">
+      </label>
+
+      <label>
+        lognitude:
+        <input type="text" formControlName="lognitude">
+      </label>
+
+      <label>          
+        latitide:
+        <input type="text" formControlName="latitide">
+      </label>
+
+      <label>
+        profileimage:
+        <input  type="text" formControlName="profileImage">
+      </label> 
+
+      <label>
+        phoneNumber:
+        <input type="text" formControlName="phoneNumber">
+      </label>
+
+      <label>
+            countryCode:
+            <input type="text" formControlName="countryCode">
+          </label>
+
+          <label>
+                aboutMe:
+                <input type="text" formControlName="aboutMe">
+              </label>
+              <button type="submit">Submitt</button>
+              <label>          
+                    Image:
+                    <input type="file" (click)="change($event)"formControlName="profileImage">
+                  </label>
+  </form> -->

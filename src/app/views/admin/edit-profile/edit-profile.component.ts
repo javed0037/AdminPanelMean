@@ -2,7 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonService } from '../../../shared/services/common.service';
 import { environment } from '../../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators ,FormControl } from '@angular/forms';
+import { DomSanitizer,SafeResourceUrl,SafeUrl} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-edit-profile',
@@ -10,132 +11,88 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
   styleUrls: ['./edit-profile.component.scss']
 })
 export class EditProfileComponent implements OnInit {
+
   
+  profileImage;
+ 
   // @ViewChild('profileForm') prf: FormGroup;
+  profileForm = new FormGroup({
+    firstName: new FormControl(''),
+    lastName: new FormControl(''),
+    email: new FormControl(''),
+    lognitude: new FormControl(''),
+    latitide: new FormControl(''),
+    phoneNumber: new FormControl(''),
+    countryCode: new FormControl(''),
+    aboutMe: new FormControl('')
+   
+  });
+  
+   datapost: any;
 
   constructor(
     private commonService: CommonService,
     private http: HttpClient,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    builder: FormBuilder,
+    private sanitizer: DomSanitizer
   ) { }
   
-  profileForm: FormGroup;
-
-  environment = environment;
-  adminData: any;
-
-
-  updateAdminProfile(){
-    var fd = new FormData();
-    fd.append('firstName', this.adminData.firstName);
-    fd.append('email', this.adminData.email);
-    fd.append('phoneNumber', this.adminData.phoneNumber);
-    fd.append('lastName', this.adminData.lastName);
-    fd.append('about', this.adminData.about);
-    // fd.append('location', this.adminData.location);
-    fd.append('thumbnail', this.adminData.thumbnail );
-
-    this.http.post(`admin/updateProfile`, fd)
-      .subscribe(response => {
-        console.log(response);
-        if(response && response['response']){
-          delete response['response'][0].password;
-          localStorage.setItem('adminData', JSON.stringify(response['response'][0]))
-          this.commonService.toggleSnackBar('Profile Updated Successfully');
-        }
-        else
-          this.commonService.toggleSnackBar();
-      }, error => {
-        console.log('error ', error);
-        this.commonService.toggleSnackBar();
-      } )
-  }
-
-  filee(file){
-    console.log('file ', file, file.target.files[0]);
-    this.adminData.thumbnail = file.target.files[0];
-  }
-
+  fileListUrl :[];
+  fileListData:[];
   ngOnInit() {
-    if(localStorage.getItem('adminData')) {
-      this.adminData = JSON.parse(localStorage.getItem('adminData'));
-      this.initProfileform();
-    } else{
-      this.commonService.toggleSnackBar();
-    }
+   
   }
+  onSubmit() {
+   
+    console.log('there are the profile form value', this.profileForm.value);
+     this.datapost = this.profileForm.value;
+     const formData = new FormData();
+     console.log("formdata",formData)
+     Object.keys(this.datapost).forEach(key => formData.append(key, this.datapost[key]));
 
-  showForm(form) {
-    console.log(form);
-  }
+    //  console.log("this.fileListData",this.fileListData);
 
-  initProfileform() {
-    this.profileForm = this.fb.group({
-      'name': [this.adminData.name, Validators.required],
-      //'access_token': [this.adminData.access_token, Validators.required],
-      //'created_on': [this.adminData.created_on, Validators.required],
-      'address': [this.adminData.address, Validators.required],
-      'email': [this.adminData.email, Validators.required],
-      'phoneNumber': [this.adminData.phoneNumber, Validators.required],
-      'timeStamp': [this.adminData.timeStamp, Validators.required],
-      '_id': [this.adminData._id, Validators.required],
+      formData.controls['profileImage'].setValue(this.fileListData);
+
+     formData.append('ProfileImage', this.profileImage);
+
+
+
+    this.http.post('admin/updateProfile', formData)
+      .subscribe((response: any) => {
+        console.log("positive response ", response);
+       
+      },
+    error => {
+      console.log("negaive ",error);
+
     });
   }
-
-  onEditProfile(profileForm) {
-
-    console.log(profileForm.value);
-return;    
+  imageupload(e)
+  {
     
-    if (this.adminData.thumbnail) {
-      
-      // const uploadData = new FormData();
-      // uploadData.append('myFile', this.adminData.thumbnail, this.adminData.thumbnail.name);
-      this.profileForm.value.profile_image = this.adminData.thumbnail;
+  }
+  filee(file){
+    // console.log('file ', file, file.target.files[0]);
+     this.profileImage = file.target.files[0];
+     console.log(this.profileImage);
+    //  let that = this;
+    //  if (file.target.files && file.target.files[0]) {
+    //      var reader = new FileReader();
+         
+    //      reader.onload = function (e:any) {
+    //        console.log(e.target.result);
+    //        that.profileImage = e.target.result;
+    //          // $('#profile-img-tag').attr('src', e.target.result);
+    //      }
+    //      reader.readAsDataURL(file.target.files[0]);
+    //  }
+     
+     console.log(this.profileImage);
+   }
 
-    }
-    console.log(' this.profileForm => ', this.profileForm.value);
-
-    // this.http
-    //   .post(`admin/updateProfile`, this.profileForm.value)
-    //   .subscribe((adminData) => {
-    //     this.adminData = adminData['data'];
-    //     localStorage.setItem('adminData', JSON.stringify(this.adminData));
-    //     window.location.reload();
-    //     this.commonService.toggleSnackBar('Profile updated successfully');
-    //   }, err => {
-    //     console.log(' Error => ', err);
-    //     this.commonService.toggleSnackBar('Error in updating profile.');
-    //   })
   }
 
-  onFileChanged(event) {
-    const file = event.target.files[0];
-    this.onUpload(file);
-  }
 
-  onUpload(file) {
 
-    const uploadData = new FormData();
-    uploadData.append('profile_image', file, file.name);
-    uploadData.append('admin_id', this.adminData._id);
-
-    this.http.post('admin/upload_profile_image', uploadData)
-      .subscribe(event => {
-        if(event['error']) {
-          this.commonService.toggleSnackBar('Error in uploading profile.');
-        } else {
-          this.adminData.profile_image = event['data']['img_path'];
-          localStorage.setItem('adminData', JSON.stringify(this.adminData));
-          window.location.reload();
-          this.commonService.toggleSnackBar('Uploading successfully.');
-        }
-      }, err => {
-        console.log(' Erro => ', err);
-        this.commonService.toggleSnackBar('Error in uploading profile.');
-      });
-  }
-
-  
-
-}
