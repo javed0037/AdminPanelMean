@@ -34,18 +34,18 @@ export class LoginComponent implements OnInit {
 
     this.http.post('admin/adminLogin', data)
       .subscribe((response: any) => {
-        //console.log("there are the response",response);
-        // console.log('response ', response, response.token );
+
+        
         if(response.data && response.token) {
           this.createToken(response.token, response.data);
         } else {
-          this.errorMessage = 'Something dfdfd went wrong';
+          this.errorMessage = 'Something  went wrong';
         }
       },
     error => {
       if(error && error.error['message']) this.errorMessage = error.error['message'];
       
-      else this.errorMessage = 'Something dfedfdfwent wrong';
+      else this.errorMessage = 'Something went wrong';
     });
   }
 

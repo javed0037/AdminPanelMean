@@ -4,6 +4,11 @@ import { environment } from '../../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { FormGroup, FormBuilder, Validators ,FormControl } from '@angular/forms';
 import { DomSanitizer,SafeResourceUrl,SafeUrl} from '@angular/platform-browser';
+import { Routes, Router, ActivatedRoute } from '@angular/router';
+// import { Routes, Router } from '@angular/router';
+import { AuthService } from '../../.././shared/services/auth.service';
+
+
 
 @Component({
   selector: 'app-edit-profile',
@@ -16,58 +21,115 @@ export class EditProfileComponent implements OnInit {
   profileImage;
  
   // @ViewChild('profileForm') prf: FormGroup;
-  profileForm = new FormGroup({
-    firstName: new FormControl(''),
-    lastName: new FormControl(''),
-    email: new FormControl(''),
-    lognitude: new FormControl(''),
-    latitide: new FormControl(''),
-    phoneNumber: new FormControl(''),
-    countryCode: new FormControl(''),
-    aboutMe: new FormControl('')
-   
-  });
-  
+
+  adminData: any;
    datapost: any;
+   profileForm:FormGroup;
+
+   initiateForm(){
+    this.profileForm = this.fb.group({
+      name: new FormControl(this.adminData.firstName),
+      email: new FormControl('ffgfgfg'),
+      phoneNumber: new FormControl(this.adminData.phoneNumber),
+      countryCode: new FormControl(''),
+      aboutMe: new FormControl('fgfhgh'),
+      location : new FormControl('gtyrtes'),
+      adminId : new FormControl(this.adminData._id)
+  
+    });
+   }
+
 
   constructor(
     private commonService: CommonService,
     private http: HttpClient,
-    private fb: FormBuilder,
+    public fb: FormBuilder,
     builder: FormBuilder,
-    private sanitizer: DomSanitizer
-  ) { }
-  
-  fileListUrl :[];
-  fileListData:[];
-  ngOnInit() {
-   
+    private sanitizer: DomSanitizer,
+    public router: Router,
+    private route: ActivatedRoute,
+    private _auth: AuthService
+  ) { 
+
+
   }
-  onSubmit() {
+  
+  fileListUrl;
+  fileListData;
+  ngOnInit() {
+    
+    let user = this._auth.getLoginUser();
+    
+    this.http.post('likeMinded/getAdminProfile', {adminId: user._id})
+    .subscribe(response => {
+      // let element = response.data;
+     // console.log(element)
+      if(response) {
+        this.adminData = response['data'];
+        this.initiateForm();     
+        this.profileForm.setValue({
+          email: 'sdfds', 
+          phoneNumber: 'sdfsd'
+        });
+        
+       // this.email = this.adminData.email;
+        // this.manageCharts();
+      } else {
+        this.commonService.toggleSnackBar();
+      }
+    }, error =>  {
+      console.log(' Error => ', error);
+      this.commonService.toggleSnackBar()
+    })
+  }
+  // ngOnInit() {
    
+  // }
+  onSubmit() {
+       
     console.log('there are the profile form value', this.profileForm.value);
      this.datapost = this.profileForm.value;
      const formData = new FormData();
      console.log("formdata",formData)
      Object.keys(this.datapost).forEach(key => formData.append(key, this.datapost[key]));
+     
 
     //  console.log("this.fileListData",this.fileListData);
 
-      formData.controls['profileImage'].setValue(this.fileListData);
+      // formData.controls['profileImage'].setValue(this.fileListData);
 
      formData.append('ProfileImage', this.profileImage);
 
-
-
     this.http.post('admin/updateProfile', formData)
       .subscribe((response: any) => {
-        console.log("positive response ", response);
+     if(response.data) {
+        localStorage.removeItem('adminData');
+        // this.createToken(response.data);
+        console.log('response.data$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',response.data);
+        localStorage.setItem('adminData', JSON.stringify(response.data));
+      
+        window.location.reload();
+        this.router.navigate(['']);
+     }else {
+      // this.errorMessage = 'Something  went wrong';
+     }
        
       },
     error => {
       console.log("negaive ",error);
 
     });
+
+  }
+
+  createToken(adminData){ 
+    delete adminData.data.password;
+    localStorage.setItem('adminData.data', JSON.stringify(adminData.data));
+      //  window.location.reload();
+      //  this.router.navigate(['']);
+    let returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+    this.router.navigate([returnUrl || '/dashboard']);
+    this.commonService.toggleSnackBar(adminData.message);
   }
   imageupload(e)
   {

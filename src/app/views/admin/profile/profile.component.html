@@ -5,10 +5,10 @@
       <div class="profile-container">
         <div class="profile-card">
           <div class="profile-avetar">
-            <img class="profile-avetar-img" width="128" height="128" [src]=" (adminData?.profile_image)? (environment.baseUrl + '/' + adminData.profile_image) : './assets/img/3002121059.jpg' " alt="Profile pic">
+            <img class="profile-avetar-img" width="128" height="128" [src]=" (adminData?.profileImage)? (environment.baseUrl + '/' + adminData.profileImage) : './assets/img/3002121059.jpg' " alt="Profile pic">
           </div>
           <div class="profile-overview">
-            <h1 class="profile-name">{{ (adminData?.name)? adminData?.name : '--' }} </h1>        
+            <h1 class="profile-name">{{ (adminData?.firstName)? adminData?.firstName : '--' }} </h1>        
             <!-- <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam quae, quam reprehenderit blanditiis. Necessitatibus et vitae</p> -->
           </div>          
         </div> 
@@ -68,7 +68,7 @@
                         <div class="media-body">
                           <h5 class="m-y-0">Phone</h5>
                           <p>
-                            <small>{{ (adminData?.mobile_number)? adminData?.mobile_number : '--' }}</small>
+                            <small>{{ (adminData?.phoneNumber)? adminData?.phoneNumber : '--' }}</small>
                           </p>
                         </div>
                       </div>                      
@@ -105,7 +105,7 @@
                         <div class="media-body">
                           <h5 class="m-y-0">Address</h5>
                           <p>
-                            <small>{{ (adminData?.address)? adminData?.address : '--' }}</small>
+                            <small>{{ (adminData?.lastName)? adminData?.lastName : '--' }}</small>
                           </p>
                         </div>
                       </div>

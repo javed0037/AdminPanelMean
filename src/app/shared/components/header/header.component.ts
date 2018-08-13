@@ -21,6 +21,7 @@ export class HeaderComponent implements OnInit {
   
   ngOnInit() {
     if(localStorage.adminData)
+    
       this.adminData = JSON.parse(localStorage.adminData);
   }
 

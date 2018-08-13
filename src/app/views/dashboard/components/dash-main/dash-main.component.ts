@@ -26,13 +26,13 @@ export class DashMainComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     
     let user = this._auth.getLoginUser();
-
+    
     this.http.post('likeMinded/getAdminProfile', {adminId: user._id})
     .subscribe(response => {
       console.log(response);
       if(response) {
         this.adminData = response['data'];
-        this.manageCharts();
+        // this.manageCharts();
       } else {
         this.commonService.toggleSnackBar();
       }
@@ -46,27 +46,27 @@ export class DashMainComponent implements OnInit, AfterViewInit {
     // this.manageCharts()
   }
 
-  manageCharts() {
+  // manageCharts() {
 
-    let userChart = this.initChart(this.adminData.usersMonthCount, 'Users', 'userChart' );
-    let restuarantChart = this.initChart(this.adminData.restuarantsMonthCount, 'Restuarants', 'restuarantChart' );
-    // let providerChart = this.initChart(this.adminData.providersMonthCount, 'Providers', 'providerChart' );
-    
-  }
+  //   let userChart = this.initChart(this.adminData.usersMonthCount, 'Users', 'userChart' );
+  //   let restuarantChart = this.initChart(this.adminData.restuarantsMonthCount, 'Restuarants', 'restuarantChart' );
+  //   // let providerChart = this.initChart(this.adminData.providersMonthCount, 'Providers', 'providerChart' );
+  
+   // }
 
-  initChart(usersData, label, chartSelector) {
-    var ctx = document.getElementById(chartSelector);
-    var chart = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: usersData.month_arr,
-        datasets: [{
-          label: `# of ${label}`,
-          data: usersData.count_arr,
-        }]
-      }
-    })
-    return chart;
-  }
+  // initChart(usersData, label, chartSelector) {
+  //   var ctx = document.getElementById(chartSelector);
+  //   var chart = new Chart(ctx, {
+  //     type: 'bar',
+  //     data: {
+  //       labels: usersData.month_arr,
+  //       datasets: [{
+  //         label: `# of ${label}`,
+  //         data: usersData.count_arr,
+  //       }]
+  //     }
+  //   })
+  //   return chart;
+  // }
 
 }
