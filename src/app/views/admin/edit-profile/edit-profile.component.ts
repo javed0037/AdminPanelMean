@@ -28,15 +28,15 @@ export class EditProfileComponent implements OnInit {
 
    initiateForm(){
     this.profileForm = this.fb.group({
-      name: new FormControl(this.adminData.firstName),
-      email: new FormControl('ffgfgfg'),
-      phoneNumber: new FormControl(this.adminData.phoneNumber),
-      countryCode: new FormControl(''),
-      aboutMe: new FormControl('fgfhgh'),
-      location : new FormControl('gtyrtes'),
-      adminId : new FormControl(this.adminData._id)
+      firstName : this.adminData.firstName,
+      email: this.adminData.email,
+      phoneNumber: this.adminData.phoneNumber,
+      aboutMe: this.adminData.aboutMe,
+      location : this.adminData.location,
+      adminId : this.adminData._id
   
     });
+
    }
 
 
@@ -66,11 +66,16 @@ export class EditProfileComponent implements OnInit {
      // console.log(element)
       if(response) {
         this.adminData = response['data'];
+        console.log("jjjjjjjjjjjjjj",this.adminData)
+
         this.initiateForm();     
-        this.profileForm.setValue({
-          email: 'sdfds', 
-          phoneNumber: 'sdfsd'
-        });
+        // this.profileForm.setValue({
+        // email: 'sdfds', 
+        // phoneNumber: 'sdfsd',
+        // firstName : 'dfdfdgfv',
+        // aboutMe : 'dffdf',
+
+        // });
         
        // this.email = this.adminData.email;
         // this.manageCharts();
@@ -94,7 +99,7 @@ export class EditProfileComponent implements OnInit {
      Object.keys(this.datapost).forEach(key => formData.append(key, this.datapost[key]));
      
 
-    //  console.log("this.fileListData",this.fileListData);
+      console.log("this.fileListData@@@@@#################",formData);
 
       // formData.controls['profileImage'].setValue(this.fileListData);
 

@@ -62,7 +62,7 @@ export class LoginComponent implements OnInit {
   forgotPassword(data){
     this.buttonLoading = true;
 
-    this.http.post('/admin/forgotPassword', data)
+    this.http.post('admin/forgotPassword', data)
       .subscribe((response: any) => {
         console.log('response ', response);
         this.forgotPassEmail = data.email;
@@ -82,10 +82,10 @@ export class LoginComponent implements OnInit {
     else{
       value.token = this.resetToken;
       value.email = this.forgotPassEmail;
+      value.newPassword = value.Cpassword;
+      console.log(' Value@@@@@@@@@@@@@@@@@@@@@@@ => ', value);
 
-      console.log(' Value => ', value);
-
-      this.http.post( '/admin/resetPass', value)
+      this.http.post( 'admin/resetPassword', value)
         .subscribe((response: any) => {
           console.log('response resetPass ', response);
           this.forgotPass = 0;
